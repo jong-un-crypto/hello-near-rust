@@ -3,7 +3,7 @@
 // 对编译合约二进制文件有一个大小限制，约为4.19 MB
 // Modules 为NEAR SDK，提供访问执行环境，允许调用其他合同、转移代币等等
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{env, log, near_bindgen, AccountId, Gas, Promise, Balance};
+use near_sdk::{env, log, near_bindgen, AccountId, NearToken, Gas, Promise};
 use near_sdk::collections::UnorderedMap;
 use near_sdk::serde_json::json;
 //Native Types u8, u16, u32, u64, u128, i8, i16, i32, i64, i128, Vec<T>, HashMap<K,V> ...
@@ -24,10 +24,11 @@ tree: TreeMap::new(b"tree-uid-1".to_vec()),
 
 // Bob 合约
 const HELLO_NEAR: &str = "hello-nearverse.testnet";
-const NO_DEPOSIT: u128 = 0;
-const CALL_GAS: Gas = Gas(5_000_000_000_000);
+const NO_DEPOSIT: NearToken = NearToken::from_near(0);
+const CALL_GAS: Gas = Gas::from_tgas(50);
 
-const MIN_STORAGE: Balance = 100_000_000_000_000_000_000_000; //0.1 N
+
+const MIN_STORAGE: NearToken = NearToken::from_yoctonear(100_000_000_000_000_000_000_000u128); //0.1 N
 //const HELLO_CODE: &[u8] = include_bytes!("./hello.wasm");
 
 // Internal Structures 包括非bindings的内部结构和 bindings的合约结构
@@ -144,7 +145,7 @@ impl Contract {
 
     // costs ~0.45 TGas, 在genesis配置
     // 接收者不存在会转账失败,  留下些余额支付未来的存储需求
-    pub fn transfer(&self, to: AccountId, amount: Balance){
+    pub fn transfer(&self, to: AccountId, amount: NearToken){
         Promise::new(to).transfer(amount);
     }
 

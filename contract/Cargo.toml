@@ -8,12 +8,14 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-near-sdk = "4.1.1"
+near-sdk = { git = "https://github.com/jong-un-crypto/near-sdk-rs", branch = "master" }
 uint = { version = "0.9.3", default-features = false }
 
+[dev-dependencies]
+borsh = { git = "https://github.com/near/borsh-rs", branch = "master" }
+
 [patch.crates-io]
-parity-secp256k1 = {git = "https://github.com/paritytech/rust-secp256k1"}
-near-crypto = {git = "https://github.com/zwong91/near-crypto-0.14.0"}
+### parity-secp256k1 = {git = "https://github.com/paritytech/rust-secp256k1"}
 
 [profile.release]
 codegen-units = 1
